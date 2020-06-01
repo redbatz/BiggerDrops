@@ -210,7 +210,10 @@ namespace BiggerDrops {
                 }
                 else
                 {
-                  maxUnits = contract.Override.maxNumberOfPlayerUnits;
+                    if (contract.Override.maxNumberOfPlayerUnits != 4)
+                    {
+                        maxUnits = contract.Override.maxNumberOfPlayerUnits;
+                    }
                 }
             }
          } else {
