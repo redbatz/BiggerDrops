@@ -174,8 +174,10 @@ namespace BiggerDrops {
             vStart++;
             vCount -= 4;
           }
+          int mechCount = DEFAULT_MECH_SLOTS + BiggerDrops.settings.additinalPlayerMechSlots;
           CustomUnitsAPI.setOverallDeployCount(System.Math.Min(DEFAULT_MECH_SLOTS + BiggerDrops.settings.additinalMechSlots + BiggerDrops.settings.vehicleCount, MAX_CU_DROP_SIZE));
-          CustomUnitsAPI.playerControl(DEFAULT_MECH_SLOTS + BiggerDrops.settings.additinalPlayerMechSlots, BiggerDrops.settings.vehicleCount);
+          // Tanks can fit in either mech or tank slots so count their max drop as as the combine total of slots
+          CustomUnitsAPI.playerControl(mechCount, BiggerDrops.settings.vehicleCount + mechCount);
           CustomUnitsAPI.setMechBayCount(iBayCount);
         }
       }
