@@ -191,8 +191,8 @@ namespace BiggerDrops {
                 if (!companyStats.ContainsStatistic(ADDITIONAL_PLAYER_MECH_STAT)) { companyStats.AddStatistic(ADDITIONAL_PLAYER_MECH_STAT, FdefaultPlayerMechSlots); };
                 if (!companyStats.ContainsStatistic(MAX_TONNAGE_STAT)) { companyStats.AddStatistic(MAX_TONNAGE_STAT, FdefaultTonnage); };
                 if (!companyStats.ContainsStatistic(CU_VEHICLE_STAT_NAME)) { companyStats.AddStatistic(CU_VEHICLE_STAT_NAME, CuInitialVehicles); };
-                UpdateCULances();
             }
+            UpdateCULances();
      }
   }
 
