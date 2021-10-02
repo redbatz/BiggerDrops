@@ -130,11 +130,11 @@ namespace BiggerDrops {
         GameObject slot2 = newLayout.transform.FindRecursive("lanceSlot2").gameObject;
         GameObject slot3 = newLayout.transform.FindRecursive("lanceSlot3").gameObject;
         GameObject slot4 = newLayout.transform.FindRecursive("lanceSlot4").gameObject;
-        primelayout.transform.FindRecursive("simbg").gameObject.active = false;
-        newLayout.transform.FindRecursive("simbg").gameObject.active = false;
-        newLayout.transform.FindRecursive("layout-lanceRating").gameObject.active = false;
-        newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.active = true;
-        newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.active = false;
+        primelayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
+        newLayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
+        newLayout.transform.FindRecursive("layout-lanceRating").gameObject.SetActive(false);
+        newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.SetActive(true);
+        newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.SetActive(false);
         TextMeshProUGUI aiText = newLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
         aiText.text = BiggerDrops.settings.additionalLanceName;
         primelayout.transform.position = new Vector3(650, 315, primelayout.transform.position.z);

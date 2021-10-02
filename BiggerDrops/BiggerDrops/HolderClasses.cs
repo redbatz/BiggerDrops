@@ -32,8 +32,6 @@ namespace BiggerDrops {
     public int CuInitialVehicles { get; set; }
     public bool respectFourDropLimit {get; set;}
     public bool limitFlashpointDrop {get; set;}
-
-
     public int additinalMechSlots {
       get {
         if (allowUpgrades && companyStats != null)
