@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using BattleTech;
 using System;
+using BiggerDrops.Data;
+using BiggerDrops.Features;
 
 namespace BiggerDrops {
   public class Settings {

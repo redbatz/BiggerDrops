@@ -4,8 +4,9 @@ using Harmony;
 using System;
 using System.Reflection;
 using UnityEngine;
+using BiggerDrops.Data;
 
-namespace BiggerDrops {
+namespace BiggerDrops.Features {
   /*[HarmonyPatch(typeof(PathNodeGrid))]
   [HarmonyPatch("ResetPathGrid")]
   [HarmonyPatch(new Type[] { typeof(Vector3), typeof(float), typeof(PathingCapabilitiesDef), typeof(float), typeof(MoveType) })]

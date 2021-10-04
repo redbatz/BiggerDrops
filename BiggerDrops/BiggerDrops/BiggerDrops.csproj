@@ -67,13 +67,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BiggerDrops.cs" />
+    <Compile Include="Data\DropDescriptionDef.cs" />
+    <Compile Include="Data\DropSlotDef.cs" />
+    <Compile Include="Features\CustomUnitsApi.cs" />
+    <Compile Include="Features\Logger.cs" />
+    <Compile Include="Features\PortraitsCount.cs" />
+    <Compile Include="Features\TransformExtensions.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="HolderClasses.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Patch.cs" />
-    <Compile Include="PortraitsCount.cs" />
+    <Compile Include="Patches\AAR_UnitsResult_Screen.cs" />
+    <Compile Include="Patches\Contract.cs" />
+    <Compile Include="Patches\GameInstanceSave.cs" />
+    <Compile Include="Patches\LanceConfiguratorPanel.cs" />
+    <Compile Include="Patches\LancePreviewPanel.cs" />
+    <Compile Include="Patches\SGCmdCenterLanceConfigBG.cs" />
+    <Compile Include="Patches\SGEngineeringScreen.cs" />
+    <Compile Include="Patches\SimGameState.cs" />
+    <Compile Include="Patches\SkirmishMechBayPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransformExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
