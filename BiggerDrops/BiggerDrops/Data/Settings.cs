@@ -12,41 +12,21 @@ namespace BiggerDrops.Data
         public int MAX_CU_DROP_SIZE = 12;
         public int MAX_CU_ADDITINAL_MECH_SLOTS = 8;
 
-        public bool debugLog { get; set; }
-        public bool debugLanceLoadout { get; set; }
-        public int skirmishMax { get; set; }
-        public string additionalLanceName { get; set; }
-        public bool allowUpgrades { get; set; }
-        public bool showAdditionalArgoUpgrades { get; set; }
-        public string argoUpgradeName { get; set; }
-        public string argoUpgradeCategory1Name { get; set; }
-        public string argoUpgradeCategory2Name { get; set; }
-        public string argoUpgradeCategory3Name { get; set; }
-        public int CuInitialVehicles { get; set; }
-        public bool respectFourDropLimit {get; set;}
-        public bool limitFlashpointDrop {get; set;}
-        public int additinalMechSlots {get; set;}
-        public int additinalPlayerMechSlots {get; set;}
-
-        public int defaultMaxTonnage {get; set;}
+        public bool debugLog = false;
+        public string additionalLanceName = "AI LANCE";
+        public bool allowUpgrades = false;
+        public bool showAdditionalArgoUpgrades = false;
+        public string argoUpgradeName = "Command & Control";
+        public string argoUpgradeCategory1Name = "Drop Size";
+        public string argoUpgradeCategory2Name = "Mech Control";
+        public string argoUpgradeCategory3Name = "Drop Tonnage";
+        public int CuInitialVehicles = 0;
+        public bool respectFourDropLimit = false;
+        public bool limitFlashpointDrop = true;
+        public int additinalMechSlots = 4;
+        public int additinalPlayerMechSlots = 4;
+        public int defaultMaxTonnage = 500;
         
-        public Settings() {
-            debugLog = false;
-            debugLanceLoadout = false;
-            additionalLanceName = "AI LANCE";
-            allowUpgrades = false;
-            showAdditionalArgoUpgrades = false;
-            argoUpgradeName = "Command & Control";
-            argoUpgradeCategory1Name = "Drop Size";
-            argoUpgradeCategory2Name = "Mech Control";
-            argoUpgradeCategory3Name = "Drop Tonnage";
-            CuInitialVehicles = 0;
-            limitFlashpointDrop = true;
-            respectFourDropLimit = false;
-            defaultMaxTonnage = 500;
-            additinalMechSlots = 4;
-            additinalPlayerMechSlots = 4;
-        }
     
     }
 }
