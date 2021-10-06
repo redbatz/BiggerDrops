@@ -57,10 +57,10 @@ namespace BiggerDrops.Patches
 
         //LanceLoadoutSlot[] loadoutSlots = (LanceLoadoutSlot[])AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").GetValue(panel);
         List<LanceLoadoutSlot> list = loadoutSlots.ToList();
-        int addUnits = maxUnits - Settings.DEFAULT_MECH_SLOTS;
+        int addUnits = maxUnits - DropManager.DefaultMechSlots;
         for (int i =0; i < BiggerDrops.baysAlreadyAdded; i++)
         {
-            list.RemoveAt(Settings.DEFAULT_MECH_SLOTS + i);
+            list.RemoveAt(DropManager.DefaultMechSlots + i);
         }
         if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
         if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
@@ -75,8 +75,8 @@ namespace BiggerDrops.Patches
         List<float> listMinTonnages = slotMinTonnages.ToList();
         for (int i = 0; i < BiggerDrops.baysAlreadyAdded; i++)
         {
-            listMaxTonnages.RemoveAt(Settings.DEFAULT_MECH_SLOTS + i);
-            listMinTonnages.RemoveAt(Settings.DEFAULT_MECH_SLOTS + i);
+            listMaxTonnages.RemoveAt(DropManager.DefaultMechSlots + i);
+            listMinTonnages.RemoveAt(DropManager.DefaultMechSlots + i);
         }
         if (addUnits > 0) { listMaxTonnages.Add(-1); }
         if (addUnits > 1) { listMaxTonnages.Add(-1); }
@@ -100,7 +100,7 @@ namespace BiggerDrops.Patches
       try {
         if (CustomUnitsAPI.Detected()) { return; }
         if (contract != null) {
-          maxUnits = Settings.MAX_ADDITINAL_MECH_SLOTS + BiggerDrops.settings.additinalMechSlots;
+          maxUnits = DropManager.DefaultMechSlots + DropManager.AdditionalMechSlots();
           __instance.UpdateSlotsCount(maxUnits);
             if(contract.Override != null)
             {
@@ -127,7 +127,7 @@ namespace BiggerDrops.Patches
                 }
             }
          } else {
-          maxUnits = Settings.MAX_ADDITINAL_MECH_SLOTS + Settings.MAX_ADDITINAL_MECH_SLOTS;
+          maxUnits = DropManager.DefaultMechSlots + DropManager.MaxAdditionalMechSlots;
           BiggerDrops.baysAlreadyAdded = 0;
           __instance.UpdateSlotsCount(maxUnits);
           //SkirmishUIFix(__instance,maxUnits);
@@ -146,7 +146,7 @@ namespace BiggerDrops.Patches
           return;
         } else
         if (contract.Override.lanceMaxTonnage == -1) {
-          __instance.lanceMaxTonnage = BiggerDrops.settings.defaultMaxTonnage;
+          __instance.lanceMaxTonnage = DropManager.MaxTonnage();
         }
       } catch (Exception e) {
         Logger.LogError(e);
@@ -193,12 +193,12 @@ namespace BiggerDrops.Patches
             pilotDef = lanceLoadoutSlot.SelectedPilot.Pilot.pilotDef;
           }
           if (mechDef != null && pilotDef != null) {
-            if (i < Settings.DEFAULT_MECH_SLOTS) {
+            if (i < DropManager.DefaultMechSlots) {
               lanceConfiguration.AddUnit(__instance.playerGUID, mechDef, pilotDef);
             } else {
               //if (i >= BiggerDrops.settings.additinalMechSlots + Settings.DEFAULT_MECH_SLOTS) { break; }
-              Logger.M.TWL(0, "LanceConfiguratorPanel.CreateLanceConfiguration. Index:" + i + " additional slots border:" + (BiggerDrops.settings.additinalMechSlots + Settings.DEFAULT_MECH_SLOTS) + " player slots border:" + (BiggerDrops.settings.additinalPlayerMechSlots + Settings.DEFAULT_MECH_SLOTS));
-              if (i >= BiggerDrops.settings.additinalPlayerMechSlots + Settings.DEFAULT_MECH_SLOTS) {
+              Logger.M.TWL(0, "LanceConfiguratorPanel.CreateLanceConfiguration. Index:" + i + " additional slots border:" + (DropManager.AdditionalMechSlots() + DropManager.DefaultMechSlots) + " player slots border:" + (DropManager.AdditionalPlayerMechs() + DropManager.DefaultMechSlots));
+              if (i >= DropManager.AdditionalPlayerMechs() + DropManager.DefaultMechSlots) {
                 Fields.callsigns.Add(pilotDef.Description.Callsign);
                 //EMPLOYER ID
                 Logger.M.WL(1, "adding to employer lance " + Settings.EMPLOYER_LANCE_GUID + " mech:" + mechDef.Description.Id + " pilot:" + pilotDef.Description.Id);

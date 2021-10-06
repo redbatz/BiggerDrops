@@ -69,12 +69,14 @@
     <Compile Include="BiggerDrops.cs" />
     <Compile Include="Data\DropDescriptionDef.cs" />
     <Compile Include="Data\DropSlotDef.cs" />
+    <Compile Include="Data\Fields.cs" />
+    <Compile Include="Data\Settings.cs" />
     <Compile Include="Features\CustomUnitsApi.cs" />
+    <Compile Include="Features\DropManager.cs" />
     <Compile Include="Features\Logger.cs" />
     <Compile Include="Features\PortraitsCount.cs" />
     <Compile Include="Features\TransformExtensions.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="HolderClasses.cs" />
     <Compile Include="Patches\AAR_UnitsResult_Screen.cs" />
     <Compile Include="Patches\Contract.cs" />
     <Compile Include="Patches\GameInstanceSave.cs" />

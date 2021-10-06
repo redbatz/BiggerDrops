@@ -98,14 +98,14 @@ namespace BiggerDrops.Features {
     public static bool Prefix(CombatHUDMechwarriorTray __instance, CombatGameState Combat, CombatHUD HUD) {
       if (CustomUnitsAPI.Detected()) { return true; }
       Logger.M.TWL(0,"CombatHUDMechwarriorTray.Init prefix");
-      if (BiggerDrops.settings.additinalPlayerMechSlots == 0) {
+      if (DropManager.AdditionalPlayerMechs() == 0) {
         Logger.M.WL(1, "no additional portraits needed");
         return true;
       }
       try {
         //int portraitsCount = 8;
-        int portraitsCount = Combat.LocalPlayerTeam.unitCount > (Settings.DEFAULT_MECH_SLOTS + Settings.MAX_ADDITINAL_MECH_SLOTS) ?
-                                                    Settings.DEFAULT_MECH_SLOTS + Settings.MAX_ADDITINAL_MECH_SLOTS : Combat.LocalPlayerTeam.unitCount;
+        int portraitsCount = Combat.LocalPlayerTeam.unitCount > (DropManager.DefaultMechSlots + DropManager.MaxAdditionalMechSlots) ?
+                                                    DropManager.DefaultMechSlots + DropManager.MaxAdditionalMechSlots : Combat.LocalPlayerTeam.unitCount;
         if (__instance.PortraitHolders.Length >= portraitsCount) {
           Logger.M.WL(1, "no additional portraits needed");
           return true;

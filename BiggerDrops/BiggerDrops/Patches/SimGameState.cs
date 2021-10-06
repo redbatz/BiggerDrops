@@ -13,7 +13,7 @@ namespace BiggerDrops.Patches
         {
             if (BiggerDrops.settings.allowUpgrades)
             {
-                BiggerDrops.settings.setCompanyStats(__instance.CompanyStats);
+               DropManager.setCompanyStats(__instance.CompanyStats);
             }
         }
     }
@@ -25,7 +25,7 @@ namespace BiggerDrops.Patches
         {
             if (BiggerDrops.settings.allowUpgrades)
             {
-                BiggerDrops.settings.setCompanyStats(__instance.CompanyStats);
+                DropManager.setCompanyStats(__instance.CompanyStats);
             }
         }
     }
@@ -33,7 +33,7 @@ namespace BiggerDrops.Patches
     class SimGameState_AddArgoUpgrade {
         public static void Postfix(SimGameState __instance) {
             if (BiggerDrops.settings.allowUpgrades) {
-                BiggerDrops.settings.UpdateCULances();
+                DropManager.UpdateCULances();
             }
         }
     }
@@ -41,7 +41,7 @@ namespace BiggerDrops.Patches
     class SimGameState_ApplyArgoUpgrades {
         public static void Postfix(SimGameState __instance) {
             if (BiggerDrops.settings.allowUpgrades) {
-                BiggerDrops.settings.UpdateCULances();
+                DropManager.UpdateCULances();
             }
         }
     }

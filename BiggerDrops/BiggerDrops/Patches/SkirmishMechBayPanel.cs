@@ -14,7 +14,7 @@ namespace BiggerDrops.Patches
         static void Prefix(SkirmishMechBayPanel __instance,LanceDef lance) {
             try {
                 if (CustomUnitsAPI.Detected()) { return; }
-                int maxUnits = Settings.MAX_ADDITINAL_MECH_SLOTS + Settings.MAX_ADDITINAL_MECH_SLOTS;
+                int maxUnits = DropManager.DefaultMechSlots + DropManager.MaxAdditionalMechSlots;
                 if (lance != null) {
                     maxUnits = lance.LanceUnits.Length;
                 }

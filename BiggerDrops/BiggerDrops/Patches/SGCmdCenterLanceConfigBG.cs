@@ -12,8 +12,8 @@ namespace BiggerDrops.Patches
             if (CustomUnitsAPI.Detected() == false)
             {
                 BiggerDrops.baysAlreadyAdded = 0;
-                __instance.LC.UpdateSlotsCount(Settings.MAX_ADDITINAL_MECH_SLOTS +
-                                               BiggerDrops.settings.additinalMechSlots);
+                __instance.LC.UpdateSlotsCount(DropManager.DefaultMechSlots +
+                                               DropManager.AdditionalMechSlots());
             }
         }
     }

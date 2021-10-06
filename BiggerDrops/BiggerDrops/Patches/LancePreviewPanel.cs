@@ -21,7 +21,7 @@ namespace BiggerDrops.Patches
         static void Prefix(LancePreviewPanel __instance, ref int maxUnits) {
             try {
                 if (CustomUnitsAPI.Detected()) { return; }
-                maxUnits = Settings.MAX_ADDITINAL_MECH_SLOTS + Settings.MAX_ADDITINAL_MECH_SLOTS;
+                maxUnits = DropManager.DefaultMechSlots + DropManager.MaxAdditionalMechSlots;
                 if (__instance.loadoutSlots.Length >= maxUnits) { return; }
                 if (__instance.loadoutSlots.Length < 2) { maxUnits = __instance.loadoutSlots.Length; return; };
                 float ydelta = __instance.loadoutSlots[1].GetComponent<RectTransform>().localPosition.y - __instance.loadoutSlots[0].GetComponent<RectTransform>().localPosition.y;
