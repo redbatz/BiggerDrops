@@ -26,7 +26,9 @@ namespace BiggerDrops.Data
         public int additinalMechSlots = 4;
         public int additinalPlayerMechSlots = 4;
         public int defaultMaxTonnage = 500;
-        
-    
+        public int CuV2FormationSize = 4;
+        public List<string> CuV2InitialSlots = new List<string>();
+
+
     }
 }

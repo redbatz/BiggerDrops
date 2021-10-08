@@ -23,7 +23,9 @@ namespace BiggerDrops {
         foreach (string name in loadOrder) { if (name == "CustomUnits") { CustomUnitsAPI.CustomUnitsDetected(); break; }; }
         foreach (var customResource in customResources) {
           Logger.M.TWL(0, "customResource:" + customResource.Key);
-          if (customResource.Key == nameof(DropSlotDef)) {
+          if (customResource.Key == nameof(DropSlotDef))
+          {
+            List<DropSlotDef> defs = new List<DropSlotDef>();
             foreach (var custItem in customResource.Value) {
               try {
                 Logger.M.WL(1, "Path:" + custItem.Value.FilePath);
@@ -31,11 +33,13 @@ namespace BiggerDrops {
                 Logger.M.WL(1, "id:" + def.Description.Id);
                 Logger.M.WL(1, JsonConvert.SerializeObject(def, Formatting.Indented));
                 def.Register();
+                defs.Add(def);
               } catch (Exception e) {
                 Logger.M.TWL(0, custItem.Key, true);
                 Logger.M.WL(0, e.ToString(), true);
               }
             }
+            DropManager.FindSlotOrder(defs);
           }
         }
       } catch (Exception e) {

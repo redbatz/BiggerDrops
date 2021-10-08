@@ -24,6 +24,17 @@ namespace BiggerDrops.Features
         dropSlotTypes.Add(def.Description.Id, def);
       }
     }
+
+    public static DropSlotDef GetDropSlotDef(string id)
+    {
+      if (dropSlotTypes.ContainsKey(id))
+      {
+        return dropSlotTypes[id];
+      }
+
+      return null;
+    }
+    
     public static bool Detected() { return CustomUnitsAPI_detected; }
     public static bool Detected_V2() { return CustomUnitsAPI_v2_detected; }
     public static void setLancesCount(int count) { if (m_setLancesCount != null) { m_setLancesCount.Invoke(null, new object[] { count }); }; }

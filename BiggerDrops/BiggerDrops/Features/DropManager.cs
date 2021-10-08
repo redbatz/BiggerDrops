@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using BattleTech;
 using System;
+using System.Linq;
 using BiggerDrops.Data;
 
 namespace BiggerDrops.Features
@@ -18,6 +19,33 @@ namespace BiggerDrops.Features
         public static readonly int MaxAdditionalMechSlots = 4;
         
         private static StatCollection companyStats;
+        private static List<string> SlotOrder = new List<string>();
+
+        public static void FindSlotOrder(List<DropSlotDef> defs)
+        {
+            Dictionary<int, List<string>> Buckets = new Dictionary<int, List<string>>();
+            foreach (DropSlotDef def in defs)
+            {
+                if (Buckets.ContainsKey(def.Order))
+                {
+                    Buckets[def.Order].Add(def.Description.Id);
+                }
+                else
+                {
+                    List<string> temp = new List<string> { def.Description.Id };
+                    Buckets.Add(def.Order, temp);
+                }
+            }
+
+            SlotOrder = new List<string>();
+            foreach (KeyValuePair<int, List<string>> pair in Buckets.OrderBy(i => i.Key))
+            {
+                foreach (string id in pair.Value)
+                {
+                    SlotOrder.Add(id);
+                }
+            }
+        }
 
         public static int AdditionalMechSlots()
         {
@@ -66,15 +94,63 @@ namespace BiggerDrops.Features
             companyStats = stats;
             if (BiggerDrops.settings.allowUpgrades)
             {
-
-                if (!companyStats.ContainsStatistic(AdditionalMechSlotsStat))
+                if (CustomUnitsAPI.Detected_V2())
                 {
-                    companyStats.AddStatistic(AdditionalMechSlotsStat,
-                        Math.Max(Math.Min(MaxAdditionalMechSlots, BiggerDrops.settings.additinalMechSlots), 0)); 
+                    Dictionary<string, int> SlotCount = new Dictionary<string, int>();
+                    foreach (string id in BiggerDrops.settings.CuV2InitialSlots)
+                    {
+                        if (SlotCount.ContainsKey(id))
+                        {
+                            SlotCount[id]++;
+                        }
+                        else
+                        {
+                            SlotCount.Add(id, 1);
+                        }
+                    }
+                    foreach (string slotId in SlotOrder)
+                    {
+                        DropSlotDef def = CustomUnitsAPI.GetDropSlotDef(slotId);
+                        if (def != null)
+                        {
+                            if (!companyStats.ContainsStatistic(def.StatName))
+                            {
+                                int val = 0;
+                                if (SlotCount.ContainsKey(slotId))
+                                {
+                                    val = SlotCount[slotId];
+                                }
+                                companyStats.AddStatistic(def.StatName, val);
+                                
+                                Logger.M.WL($"failed to find slotdef: {slotId}");
+                            }
+                        }
+                        else
+                        {
+                            Logger.M.WL($"failed to find slotdef: {slotId}");
+                        }
+                    }
                 }
-                if (!companyStats.ContainsStatistic(AdditionPlayerMechsStat)) {
-                    companyStats.AddStatistic(AdditionPlayerMechsStat, 
-                    Math.Max(Math.Min(MaxAdditionalMechSlots, BiggerDrops.settings.additinalPlayerMechSlots), 0)); 
+                else
+                {
+                    
+                    if (!companyStats.ContainsStatistic(AdditionalMechSlotsStat))
+                    {
+                        companyStats.AddStatistic(AdditionalMechSlotsStat,
+                            Math.Max(Math.Min(MaxAdditionalMechSlots, BiggerDrops.settings.additinalMechSlots), 0));
+                    }
+
+                    if (!companyStats.ContainsStatistic(AdditionPlayerMechsStat))
+                    {
+                        companyStats.AddStatistic(AdditionPlayerMechsStat,
+                            Math.Max(Math.Min(MaxAdditionalMechSlots, BiggerDrops.settings.additinalPlayerMechSlots),
+                                0));
+                    }
+                    
+                    if (!companyStats.ContainsStatistic(CuVehicleStat))
+                    {
+                        companyStats.AddStatistic(CuVehicleStat, BiggerDrops.settings.CuInitialVehicles);
+                    };
                 }
 
                 if (!companyStats.ContainsStatistic(MaxTonnageStat))
@@ -83,10 +159,7 @@ namespace BiggerDrops.Features
                         Math.Max(BiggerDrops.settings.defaultMaxTonnage, 0));
                 }
 
-                if (!companyStats.ContainsStatistic(CuVehicleStat))
-                {
-                    companyStats.AddStatistic(CuVehicleStat, BiggerDrops.settings.CuInitialVehicles);
-                };
+                
             }
             UpdateCULances();
         }
@@ -130,15 +203,127 @@ namespace BiggerDrops.Features
             CustomUnitsAPI.setMechBayCount(iBayCount);
         }
 
+        private static void CuV2NoUpgrades()
+        {
+            List<List<string>> LanceLayout = new List<List<string>>();
+            List<string> currentLance = new List<string>();
+            
+            foreach (string slot in BiggerDrops.settings.CuV2InitialSlots)
+            {
+                if (currentLance.Count >= BiggerDrops.settings.CuV2FormationSize)
+                {
+                    LanceLayout.Add(currentLance);
+                    currentLance = new List<string>();
+                }
+                currentLance.Add(slot);
+            }
+            CustomUnitsAPI.PushDropLayout(CustomUnitsAPI.BIGGER_DROPS_LAYOUT_ID, LanceLayout, BiggerDrops.settings.CuV2InitialSlots.Count);
+        }
+
         private static void UpdateCULancesV2()
         {
+            int UnitCount = 0;
+            List<List<string>> LanceLayout = new List<List<string>>();
+            List<string> currentLance = new List<string>();
+            List<DropSlotDef> separateLance = new List<DropSlotDef>();
+            List<DropSlotDef> HotDrop = new List<DropSlotDef>();
+
+            foreach (string slotId in SlotOrder)
+            {
+                DropSlotDef def = CustomUnitsAPI.GetDropSlotDef(slotId);
+                if (def != null)
+                {
+                    if (def.SeparateLance || def.HotDrop)
+                    {
+                        if (def.HotDrop)
+                        {
+                            HotDrop.Add(def);
+                        }
+                        else
+                        {
+                            separateLance.Add(def);
+                        }
+                    }
+                    else
+                    {
+                        int slotCount = companyStats.GetValue<int>(def.StatName);
+                        UnitCount += slotCount;
+                        for (int i = 0; i < slotCount; i++)
+                        {
+                            if (currentLance.Count >= BiggerDrops.settings.CuV2FormationSize)
+                            {
+                                LanceLayout.Add(currentLance);
+                                currentLance = new List<string>();
+                            }
+                            currentLance.Add(slotId);
+                        } 
+                    }
+                    
+                }
+            }
+
+            if (currentLance.Count > 0)
+            {
+                LanceLayout.Add(currentLance);
+            }
+            
+            foreach (DropSlotDef def in separateLance)
+            {
+                currentLance = new List<string>();
+                int slotCount = companyStats.GetValue<int>(def.StatName);
+                UnitCount += slotCount;
+                for (int i = 0; i < slotCount; i++)
+                {
+                    if (currentLance.Count >= BiggerDrops.settings.CuV2FormationSize)
+                    {
+                        LanceLayout.Add(currentLance);
+                        currentLance = new List<string>();
+                    }
+                    currentLance.Add(def.Description.Id);
+                } 
+                if (currentLance.Count > 0)
+                {
+                    LanceLayout.Add(currentLance);
+                }
+            }
+            
+            currentLance = new List<string>();
+            foreach (DropSlotDef def in HotDrop)
+            {
+                
+                int slotCount = companyStats.GetValue<int>(def.StatName);
+                UnitCount += slotCount;
+                for (int i = 0; i < slotCount; i++)
+                {
+                    if (currentLance.Count >= BiggerDrops.settings.CuV2FormationSize)
+                    {
+                        LanceLayout.Add(currentLance);
+                        currentLance = new List<string>();
+                    }
+                    currentLance.Add(def.Description.Id);
+                } 
+                
+            }
+            if (currentLance.Count > 0)
+            {
+                LanceLayout.Add(currentLance);
+            }
+            CustomUnitsAPI.PushDropLayout(CustomUnitsAPI.BIGGER_DROPS_LAYOUT_ID, LanceLayout, UnitCount);
+
         }
 
         public static void UpdateCULances()
         {
             if (CustomUnitsAPI.Detected_V2())
             {
-                UpdateCULancesV2();
+                if (BiggerDrops.settings.allowUpgrades)
+                {
+                    UpdateCULancesV2();
+                }
+                else
+                {
+                    CuV2NoUpgrades();
+                }
             }
             else
             {
