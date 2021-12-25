@@ -15,6 +15,7 @@ namespace BiggerDrops.Features
         public static readonly string AdditionPlayerMechsStat = "BiggerDrops_AdditionalPlayerMechSlots";
         public static readonly string MaxTonnageStat = "BiggerDrops_MaxTonnage";
         public static readonly string CuVehicleStat = "BiggerDrops_CuVehicleCount";
+        public static readonly string legacyUpgradeDone = "BiggerDrops_LegacyUpgrade";
         public static readonly int MinCuBays = 3;
         public static readonly int MaxAdditionalMechSlots = 4;
         
@@ -92,10 +93,21 @@ namespace BiggerDrops.Features
 
         public static void setCompanyStats(StatCollection stats) {
             companyStats = stats;
+            bool hasCu2 = CustomUnitsAPI.Detected_V2();
             if (BiggerDrops.settings.allowUpgrades)
             {
-                if (CustomUnitsAPI.Detected_V2())
+                if (hasCu2)
                 {
+                    // one time upgrade of this stat for existing careers
+                    if (companyStats.ContainsStatistic(AdditionalMechSlotsStat) && !companyStats.ContainsStatistic(legacyUpgradeDone))
+                    {
+                        companyStats.AddStatistic(legacyUpgradeDone, 1);
+                        companyStats.Int_Add(companyStats.GetStatistic(AdditionalMechSlotsStat), DefaultMechSlots);
+                    }
+                    if (!companyStats.ContainsStatistic(legacyUpgradeDone))
+                    {
+                        companyStats.AddStatistic(legacyUpgradeDone, 1);
+                    }
                     Dictionary<string, int> SlotCount = new Dictionary<string, int>();
                     foreach (string id in BiggerDrops.settings.CuV2InitialSlots)
                     {
