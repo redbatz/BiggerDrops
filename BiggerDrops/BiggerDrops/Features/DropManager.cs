@@ -265,6 +265,13 @@ namespace BiggerDrops.Features
                                 break;
                             }
                         }
+
+                        if (!bFound)
+                        {
+                            List<DropSlotDef> cLance = new List<DropSlotDef>();
+                            cLance.Add(def);
+                            combinedLances.Add(cLance);
+                        }
                     }
                     else
                     {
