@@ -239,44 +239,91 @@ namespace BiggerDrops.Features
             List<string> currentLance = new List<string>();
             List<DropSlotDef> separateLance = new List<DropSlotDef>();
             List<DropSlotDef> HotDrop = new List<DropSlotDef>();
+            List<List<DropSlotDef>> combinedLances = new List<List<DropSlotDef>>();
 
             foreach (string slotId in SlotOrder)
             {
                 DropSlotDef def = CustomUnitsAPI.GetDropSlotDef(slotId);
                 if (def != null)
                 {
-                    if (def.SeparateLance || def.HotDrop)
+                    if (def.combineLanceWith.Count > 0)
                     {
-                        if (def.HotDrop)
+                        bool bFound = false;
+                        foreach (List<DropSlotDef> cLance in combinedLances)
                         {
-                            HotDrop.Add(def);
-                        }
-                        else
-                        {
-                            separateLance.Add(def);
+                            foreach (DropSlotDef slot in cLance)
+                            {
+                                if (def.combineLanceWith.Contains(slot.Description.Id))
+                                {
+                                    bFound = true;
+                                    break;
+                                }
+                            }
+                            if (bFound)
+                            {
+                                cLance.Add(def);
+                                break;
+                            }
                         }
                     }
                     else
                     {
-                        int slotCount = companyStats.GetValue<int>(def.StatName);
-                        UnitCount += slotCount;
-                        for (int i = 0; i < slotCount; i++)
+                        if (def.SeparateLance || def.HotDrop)
                         {
-                            if (currentLance.Count >= BiggerDrops.settings.CuV2FormationSize)
+                            if (def.HotDrop)
                             {
-                                LanceLayout.Add(currentLance);
-                                currentLance = new List<string>();
+                                HotDrop.Add(def);
                             }
-                            currentLance.Add(slotId);
-                        } 
+                            else
+                            {
+                                separateLance.Add(def);
+                            }
+                        }
+                        else
+                        {
+                            int slotCount = companyStats.GetValue<int>(def.StatName);
+                            UnitCount += slotCount;
+                            for (int i = 0; i < slotCount; i++)
+                            {
+                                if (currentLance.Count >= BiggerDrops.settings.CuV2FormationSize)
+                                {
+                                    LanceLayout.Add(currentLance);
+                                    currentLance = new List<string>();
+                                }
+
+                                currentLance.Add(slotId);
+                            }
+                        }
                     }
-                    
                 }
             }
 
             if (currentLance.Count > 0)
             {
                 LanceLayout.Add(currentLance);
+            }
+
+            foreach (List<DropSlotDef> cLance in combinedLances)
+            {
+                currentLance = new List<string>();
+                foreach (DropSlotDef def in cLance)
+                {
+                    int slotCount = companyStats.GetValue<int>(def.StatName);
+                    UnitCount += slotCount;
+                    for (int i = 0; i < slotCount; i++)
+                    {
+                        if (currentLance.Count >= BiggerDrops.settings.CuV2FormationSize)
+                        {
+                            LanceLayout.Add(currentLance);
+                            currentLance = new List<string>();
+                        }
+                        currentLance.Add(def.Description.Id);
+                    }
+                }
+                if (currentLance.Count > 0)
+                {
+                    LanceLayout.Add(currentLance);
+                }
             }
             
             foreach (DropSlotDef def in separateLance)

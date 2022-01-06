@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BiggerDrops.Data
 {
     public class DropSlotDef {
@@ -10,5 +12,6 @@ namespace BiggerDrops.Data
         public bool SeparateLance { get; set; } = false; // slot cannot be mixed with other slots in a Lance
         public bool HotDrop { get; set; } = false; // Can the Slot be used for a delayed "Hot Drop",
                                                    // Hot Drop Slots are automatically separated into a distinct group of lances
+        public List<string> combineLanceWith = new List<string>(); // slot types to combine into a separate lance group with
     }
 }

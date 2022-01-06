@@ -74,7 +74,7 @@ namespace BiggerDrops.Features
           }
         }
       }
-      Logger.M.WL(1, "CU API detected:" + Detected() + " CU API v2 detected:" + Detected_V2());
+      Logger.M.WL(1, "CU API detected:" + Detected() + " CU API v2 detected:" + Detected_V2(), true);
     }
 
   }

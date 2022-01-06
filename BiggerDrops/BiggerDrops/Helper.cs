@@ -17,19 +17,6 @@ namespace BiggerDrops {
 
     public class Helper {
 
-        //public static Settings LoadSettings() {
-        //    try {
-        //        using (StreamReader r = new StreamReader($"{BiggerDrops.ModDirectory}/settings.json")) {
-        //            string json = r.ReadToEnd();
-        //            return JsonConvert.DeserializeObject<Settings>(json);
-        //        }
-        //    }
-        //    catch (Exception ex) {
-        //        Logger.LogError(ex);
-        //        return null;
-        //    }
-        //}
-
         public static void SaveState(string instanceGUID, DateTime saveTime) {
             try {
                 int unixTimestamp = (int)(saveTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
