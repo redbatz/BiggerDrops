@@ -375,6 +375,8 @@ namespace BiggerDrops.Features
                 LanceLayout.Add(currentLance);
             }
             CustomUnitsAPI.PushDropLayout(CustomUnitsAPI.BIGGER_DROPS_LAYOUT_ID, LanceLayout, UnitCount);
+            int iBayCount = Math.Max(MinCuBays, companyStats.GetValue<int>("MechBayPods"));
+            CustomUnitsAPI.setMechBayCount(iBayCount);
 
         }
 
