@@ -229,7 +229,7 @@ namespace BiggerDrops.Features
                 }
                 currentLance.Add(slot);
             }
-            CustomUnitsAPI.PushDropLayout(CustomUnitsAPI.BIGGER_DROPS_LAYOUT_ID, LanceLayout, BiggerDrops.settings.CuV2InitialSlots.Count);
+            CustomUnitsAPI.PushDropLayout(CustomUnitsAPI.BIGGER_DROPS_LAYOUT_ID, LanceLayout, BiggerDrops.settings.CuV2InitialSlots.Count, new List<string>() { "Lance A", "Lance B", "Lance C" });
         }
 
         private static void UpdateCULancesV2()
@@ -374,7 +374,7 @@ namespace BiggerDrops.Features
             {
                 LanceLayout.Add(currentLance);
             }
-            CustomUnitsAPI.PushDropLayout(CustomUnitsAPI.BIGGER_DROPS_LAYOUT_ID, LanceLayout, UnitCount);
+            CustomUnitsAPI.PushDropLayout(CustomUnitsAPI.BIGGER_DROPS_LAYOUT_ID, LanceLayout, UnitCount, new List<string>() { "Lance A", "Lance B", "Lance C" });
             int iBayCount = Math.Max(MinCuBays, companyStats.GetValue<int>("MechBayPods"));
             CustomUnitsAPI.setMechBayCount(iBayCount);
 
