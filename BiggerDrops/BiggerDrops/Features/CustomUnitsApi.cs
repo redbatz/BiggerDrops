@@ -42,7 +42,19 @@ namespace BiggerDrops.Features
     public static void setOverallDeployCount(int count) { if (m_setOverallDeployCount != null) { m_setOverallDeployCount.Invoke(null, new object[] { count }); }; }
     public static void playerControl(int mechs, int vehicles) { if (m_playerControl != null) { m_playerControl.Invoke(null, new object[] { mechs, vehicles }); }; }
     public static void setMechBayCount(int count) { if (m_setMechBayCount != null) { m_setMechBayCount.Invoke(null, new object[] { count }); }; }
-    public static void PushDropLayout(string id, List<List<string>> layout, int maxUnits) { m_PushDropLayout.Invoke(null, new object[] { id, layout, maxUnits }); }
+    public static void PushDropLayout(string id, List<List<string>> layout, int maxUnits, List<string> names = null) {
+      if (m_PushDropLayout == null) { return; }
+      var parameters = m_PushDropLayout.GetParameters();
+      try {
+        if (parameters.Length == 4) {
+          m_PushDropLayout.Invoke(null, new object[] { id, layout, maxUnits, names });
+        } else {
+          m_PushDropLayout.Invoke(null, new object[] { id, layout, maxUnits });
+        }
+      }catch(Exception e) {
+        Logger.M.TWL(0, e.ToString(), true);
+      }
+    }
     public static void CustomUnitsDetected() {
       Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
       Logger.M.TWL(0, "CustomUnitsAPI.CustomUnitsDetected");
