@@ -16,10 +16,12 @@ namespace BiggerDrops.Data
         public string additionalLanceName = "AI LANCE";
         public bool allowUpgrades = false;
         public bool showAdditionalArgoUpgrades = false;
+        public bool enable4thCategory = false;
         public string argoUpgradeName = "Command & Control";
         public string argoUpgradeCategory1Name = "Drop Size";
         public string argoUpgradeCategory2Name = "Mech Control";
         public string argoUpgradeCategory3Name = "Drop Tonnage";
+        public string argoUpgradeCategory4Name = "Drop Information";
         public int CuInitialVehicles = 0;
         public bool respectFourDropLimit = false;
         public bool limitFlashpointDrop = true;

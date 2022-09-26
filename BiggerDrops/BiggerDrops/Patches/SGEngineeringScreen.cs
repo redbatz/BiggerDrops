@@ -24,7 +24,8 @@ namespace BiggerDrops.Patches
             try
             {
                 //This needs to be done by as a prefix to avoid strange bugs with upgrades showing the wrong state
-                if (__instance.transform.FindRecursive("BDUpgradePanel") == null) {
+                if (__instance.transform.FindRecursive("BDUpgradePanel") == null)
+                {
                     GameObject primelayout = __instance.transform.FindRecursive("uixPrbPanl_SystemsAndSupportPanel").gameObject;
                     GameObject newLayout = GameObject.Instantiate(primelayout);
                     newLayout.transform.parent = primelayout.transform.parent;
@@ -38,16 +39,26 @@ namespace BiggerDrops.Patches
                     upgrade2Text.text = BiggerDrops.settings.argoUpgradeCategory2Name;
                     TextMeshProUGUI upgrade3Text = newLayout.transform.FindRecursive("text_driveeSystem").gameObject.GetComponent<TextMeshProUGUI>();
                     upgrade3Text.text = BiggerDrops.settings.argoUpgradeCategory3Name;
-                    GameObject habitat = newLayout.transform.FindRecursive("HabitatSystem").gameObject;
-                    habitat.name = "BDHabitat";
-                    habitat.SetActive(false);
+
                     GameObject driverPipSlots = newLayout.transform.FindRecursive("drivePipSlots").gameObject;
                     driverPipSlots.name = "BDDropTonnage";
                     GameObject structurePipSlots = newLayout.transform.FindRecursive("structurePipSlots").gameObject;
                     structurePipSlots.name = "BDMechControl";
                     GameObject powerPipSlots = newLayout.transform.FindRecursive("powerPipSlots").gameObject;
                     powerPipSlots.name = "BDMechDrops";
-
+                    if (BiggerDrops.settings.enable4thCategory)
+                    {
+                        TextMeshProUGUI upgrade4Text = newLayout.transform.FindRecursive("text_habitatSystem").gameObject.GetComponent<TextMeshProUGUI>();
+                        upgrade4Text.text = BiggerDrops.settings.argoUpgradeCategory4Name;
+                        GameObject habitat = newLayout.transform.FindRecursive("habitatPipSlots").gameObject;
+                        habitat.name = "BDDropInformation";
+                    }
+                    else
+                    {
+                        GameObject habitat = newLayout.transform.FindRecursive("HabitatSystem").gameObject;
+                        habitat.name = "BDHabitat";
+                        habitat.SetActive(false);
+                    }
                 }
             }
             catch (Exception e)
@@ -74,6 +85,11 @@ namespace BiggerDrops.Patches
                     engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)driverPipSlots.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
                     engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)structurePipSlots.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
                     engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)powerPipSlots.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
+                    if (BiggerDrops.settings.enable4thCategory)
+                    {
+                    GameObject habitatPipSlots = primelayout.transform.FindRecursive("BDDropInformation").gameObject;
+                    engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)habitatPipSlots.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
+                    }
                     List<ShipModuleUpgrade> available = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "AvailableUpgrades").GetValue(__instance);
                     List<ShipModuleUpgrade> purchased = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "PurchasedUpgrades").GetValue(__instance);
                     UIManager uiManager = (UIManager)AccessTools.Field(typeof(SGEngineeringScreen), "uiManager").GetValue(__instance);
@@ -126,6 +142,15 @@ namespace BiggerDrops.Patches
                         if ((UnityEngine.Object)transform.gameObject.GetComponent<SGEngineeringShipUpgradePip>() != (UnityEngine.Object)null)
                             engineeringShipUpgradePipList.Add(transform.gameObject);
                     }
+                    if (BiggerDrops.settings.enable4thCategory)
+                    {
+                        GameObject habitatPipSlots = primelayout.transform.FindRecursive("BDDropInformation").gameObject;
+                        foreach (Transform transform in habitatPipSlots.transform)
+                        {
+                            if ((UnityEngine.Object)transform.gameObject.GetComponent<SGEngineeringShipUpgradePip>() != (UnityEngine.Object)null)
+                                engineeringShipUpgradePipList.Add(transform.gameObject);
+                        }
+                    }
                     List<ShipModuleUpgrade> available = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "AvailableUpgrades").GetValue(__instance);
                     List<ShipModuleUpgrade> purchased = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "PurchasedUpgrades").GetValue(__instance);
                     SimGameState simGame = (SimGameState)AccessTools.Property(typeof(SGEngineeringScreen), "simState").GetValue(__instance);
@@ -162,7 +187,7 @@ namespace BiggerDrops.Patches
                 return true;
             }
             try
-            {   
+            {
                 //Todo: upgrades at or below this are vanilla
                 if (upgrade.ShipUpgradeCategoryValue.IsVanilla /*upgrade.ShipUpgradeCategoryValue.ID <= ShipUpgradeCategoryEnumeration.GetShipUpgradeCategoryByName("TRAINING").ID*/)
                 {
@@ -175,18 +200,34 @@ namespace BiggerDrops.Patches
                     Transform BDMechDrops = primelayout.transform.FindRecursive("BDMechDrops");
                     Transform BDMechControl = primelayout.transform.FindRecursive("BDMechControl");
                     Transform BDDropTonnage = primelayout.transform.FindRecursive("BDDropTonnage");
+                    Transform BDDropInformation = null;
+                    if (BiggerDrops.settings.enable4thCategory) 
+                    {
+                         BDDropInformation = primelayout.transform.FindRecursive("BDDropInformation");
+                    }
                     List<ShipModuleUpgrade> available = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "AvailableUpgrades").GetValue(__instance);
                     List<ShipModuleUpgrade> purchased = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "PurchasedUpgrades").GetValue(__instance);
                     SimGameState simGame = (SimGameState)AccessTools.Property(typeof(SGEngineeringScreen), "simState").GetValue(__instance);
                     UIManager uiManager = (UIManager)AccessTools.Field(typeof(SGEngineeringScreen), "uiManager").GetValue(__instance);
                     Transform parent;
-                    if (upgrade.ShipUpgradeCategoryValue.Name == "BDDropTonnage") {
+                    if (upgrade.ShipUpgradeCategoryValue.Name == "BDDropTonnage")
+                    {
                         parent = BDDropTonnage;
-                    } else if (upgrade.ShipUpgradeCategoryValue.Name == "BDMechControl") {
+                    }
+                    else if (upgrade.ShipUpgradeCategoryValue.Name == "BDMechControl")
+                    {
                         parent = BDMechControl;
-                    } else if (upgrade.ShipUpgradeCategoryValue.Name == "BDMechDrops") { 
+                    }
+                    else if (upgrade.ShipUpgradeCategoryValue.Name == "BDMechDrops")
+                    {
                         parent = BDMechDrops;
-                    } else { 
+                    }
+                    else if (BDDropInformation != null && upgrade.ShipUpgradeCategoryValue.Name == "BDDropInformation")
+                    {
+                        parent = BDDropInformation;
+                    }
+                    else
+                    {
                         Debug.LogWarning((object)string.Format("Invalid location ({0}) for ship module {1}", (object)upgrade.Location, (object)upgrade.Description.Id));
                         return false;
                     }
@@ -202,7 +243,7 @@ namespace BiggerDrops.Patches
                     component.OnModuleSelected.RemoveAllListeners();
                     component.OnModuleSelected.AddListener(new UnityAction<ShipModuleUpgrade>(__instance.UpgradeSelected));
                 }
-      
+
             }
             catch (Exception e)
             {
