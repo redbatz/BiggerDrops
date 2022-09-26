@@ -26,10 +26,12 @@ Bigger drops is configurable through the following settings. The values shown he
   "defaultMaxTonnage": 500,
   "allowUpgrades" : false,
   "showAdditionalArgoUpgrades" : false,
+  "enable4thCategory": false,
   "argoUpgradeName" : "Command & Control",
   "argoUpgradeCategory1Name" : "Drop Size", 
   "argoUpgradeCategory2Name" : "Mech Control", 
   "argoUpgradeCategory3Name" : "Drop Tonnage",
+  "argoUpgradeCategory4Name" : "Drop Information",
   "CuInitialVehicles" : 0,
   "respectFourDropLimit" : false,
   "limitFlashpointDrop" : true,
@@ -53,6 +55,8 @@ upgrades/events can alter this value by changing the `BiggerDrops_MaxTonnage` st
 
 `showAdditionalArgoUpgrades` : When true, an additional area on the Argo's upgrade screen becomes available for upgrades to appear in with 3 separate categories for upgrades.
 
+`enable4thCategory` : Enables the use of the 4th category in the new upgrade bar.
+
 `argoUpgradeName` :  When `showAdditionalArgoUpgrades` is true, this is the name of the new upgrades bar in the Argo's upgrade screen.
 
 `argoUpgradeCategory1Name` : When `showAdditionalArgoUpgrades` is true, this is the name of the 1st category in the new upgrade bar
@@ -60,6 +64,8 @@ upgrades/events can alter this value by changing the `BiggerDrops_MaxTonnage` st
 `argoUpgradeCategory2Name` : When `showAdditionalArgoUpgrades` is true, this is the name of the 2nd category in the new upgrade bar
 
 `argoUpgradeCategory3Name` : When `showAdditionalArgoUpgrades` is true, this is the name of the 3rd category in the new upgrade bar
+
+`argoUpgradeCategory4Name` : When `showAdditionalArgoUpgrades` is true, this is the name of the 4th category in the new upgrade bar
 
 ### When Running Without CustomUnits
 the following settings are only applicable if CustomUnits mod is not present
