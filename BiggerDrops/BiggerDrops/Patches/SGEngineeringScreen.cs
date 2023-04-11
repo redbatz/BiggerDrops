@@ -46,12 +46,22 @@ namespace BiggerDrops.Patches
                     structurePipSlots.name = "BDMechControl";
                     GameObject powerPipSlots = newLayout.transform.FindRecursive("powerPipSlots").gameObject;
                     powerPipSlots.name = "BDMechDrops";
-                    if (BiggerDrops.settings.enable4thCategory)
+                    if (BiggerDrops.settings.enableRTExtendedCategories)
                     {
                         TextMeshProUGUI upgrade4Text = newLayout.transform.FindRecursive("text_habitatSystem").gameObject.GetComponent<TextMeshProUGUI>();
-                        upgrade4Text.text = BiggerDrops.settings.argoUpgradeCategory4Name;
-                        GameObject habitat = newLayout.transform.FindRecursive("habitatPipSlots").gameObject;
-                        habitat.name = "BDDropInformation";
+                        upgrade4Text.text = BiggerDrops.settings.argoUpgradeCategoryRT1Name;
+                        GameObject rtExtra1 = newLayout.transform.FindRecursive("habitatPipSlots").gameObject;
+                        rtExtra1.name = "RTExtra1";
+
+                        GameObject combatLayout = __instance.transform.FindRecursive("uixPrfPanlcombatAndDeployment").gameObject;
+                        combatLayout.transform.localPosition = new Vector3(-290, -32, 0);
+                        GameObject mechBays = combatLayout.transform.FindRecursive("MechBays").gameObject;
+                        GameObject rtExtra2Parent = GameObject.Instantiate(mechBays);
+                        rtExtra2Parent.transform.parent = mechBays.transform.parent;
+                        TextMeshProUGUI rtExtra2Text = rtExtra2Parent.transform.FindRecursive("text_mechBays").gameObject.GetComponent<TextMeshProUGUI>();
+                        rtExtra2Text.text = BiggerDrops.settings.argoUpgradeCategoryRT2Name;
+                        GameObject rtExtra2 = rtExtra2Parent.transform.FindRecursive("mechBayPipSlots").gameObject;
+                        rtExtra2.name = "RTExtra2";
                     }
                     else
                     {
@@ -85,10 +95,16 @@ namespace BiggerDrops.Patches
                     engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)driverPipSlots.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
                     engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)structurePipSlots.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
                     engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)powerPipSlots.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
-                    if (BiggerDrops.settings.enable4thCategory)
+                    if (BiggerDrops.settings.enableRTExtendedCategories)
                     {
-                    GameObject habitatPipSlots = primelayout.transform.FindRecursive("BDDropInformation").gameObject;
-                    engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)habitatPipSlots.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
+                        GameObject rtExtra1 = primelayout.transform.FindRecursive("RTExtra1").gameObject;
+                        engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)rtExtra1.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
+
+                        GameObject combatLayout = __instance.transform.FindRecursive("uixPrfPanlcombatAndDeployment").gameObject;
+                        GameObject rtExtra2 = combatLayout.transform.FindRecursive("RTExtra2").gameObject;
+                        engineeringShipUpgradePipList.AddRange((IEnumerable<SGEngineeringShipUpgradePip>)rtExtra2.GetComponentsInChildren<SGEngineeringShipUpgradePip>());
+
+
                     }
                     List<ShipModuleUpgrade> available = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "AvailableUpgrades").GetValue(__instance);
                     List<ShipModuleUpgrade> purchased = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "PurchasedUpgrades").GetValue(__instance);
@@ -142,10 +158,18 @@ namespace BiggerDrops.Patches
                         if ((UnityEngine.Object)transform.gameObject.GetComponent<SGEngineeringShipUpgradePip>() != (UnityEngine.Object)null)
                             engineeringShipUpgradePipList.Add(transform.gameObject);
                     }
-                    if (BiggerDrops.settings.enable4thCategory)
+                    if (BiggerDrops.settings.enableRTExtendedCategories)
                     {
-                        GameObject habitatPipSlots = primelayout.transform.FindRecursive("BDDropInformation").gameObject;
-                        foreach (Transform transform in habitatPipSlots.transform)
+                        GameObject rtExtra1 = primelayout.transform.FindRecursive("RTExtra1").gameObject;
+                        foreach (Transform transform in rtExtra1.transform)
+                        {
+                            if ((UnityEngine.Object)transform.gameObject.GetComponent<SGEngineeringShipUpgradePip>() != (UnityEngine.Object)null)
+                                engineeringShipUpgradePipList.Add(transform.gameObject);
+                        }
+
+                        GameObject combatLayout = __instance.transform.FindRecursive("uixPrfPanlcombatAndDeployment").gameObject;
+                        GameObject rtExtra2 = combatLayout.transform.FindRecursive("RTExtra2").gameObject;
+                        foreach (Transform transform in rtExtra2.transform)
                         {
                             if ((UnityEngine.Object)transform.gameObject.GetComponent<SGEngineeringShipUpgradePip>() != (UnityEngine.Object)null)
                                 engineeringShipUpgradePipList.Add(transform.gameObject);
@@ -200,10 +224,13 @@ namespace BiggerDrops.Patches
                     Transform BDMechDrops = primelayout.transform.FindRecursive("BDMechDrops");
                     Transform BDMechControl = primelayout.transform.FindRecursive("BDMechControl");
                     Transform BDDropTonnage = primelayout.transform.FindRecursive("BDDropTonnage");
-                    Transform BDDropInformation = null;
-                    if (BiggerDrops.settings.enable4thCategory) 
+                    Transform RTExtra1 = null;
+                    Transform RTExtra2 = null;
+                    if (BiggerDrops.settings.enableRTExtendedCategories)
                     {
-                         BDDropInformation = primelayout.transform.FindRecursive("BDDropInformation");
+                        RTExtra1 = primelayout.transform.FindRecursive("RTExtra1");
+                        GameObject combatLayout = __instance.transform.FindRecursive("uixPrfPanlcombatAndDeployment").gameObject;
+                        RTExtra2 = combatLayout.transform.FindRecursive("RTExtra2");
                     }
                     List<ShipModuleUpgrade> available = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "AvailableUpgrades").GetValue(__instance);
                     List<ShipModuleUpgrade> purchased = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "PurchasedUpgrades").GetValue(__instance);
@@ -222,9 +249,13 @@ namespace BiggerDrops.Patches
                     {
                         parent = BDMechDrops;
                     }
-                    else if (BDDropInformation != null && upgrade.ShipUpgradeCategoryValue.Name == "BDDropInformation")
+                    else if (RTExtra1 != null && upgrade.ShipUpgradeCategoryValue.Name == "RTExtra1")
                     {
-                        parent = BDDropInformation;
+                        parent = RTExtra1;
+                    }
+                    else if (RTExtra2 != null && upgrade.ShipUpgradeCategoryValue.Name == "RTExtra2")
+                    {
+                        parent = RTExtra2;
                     }
                     else
                     {
